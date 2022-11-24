@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.youngtvjobs.ycc.rental.rentalMapper">
+	  
+	  <sql id="selectFromClassroom">
+	  	SELECT * from classroom
+	  </sql>
+	  
+	  <!-- selectBox에서 장소 고를때 장소를 불러오는 sql문 -->
+	  <select id="selectRentalPlace" resultType="RentalDto">
+	  	select * from classroom
+	  </select>
+	  
+	  <!-- 페이지 열때부터 기본적으로 prental_id를 가져오는 sql문 -->
+	  <select id="viewRentalid" resultType="RentalDto">
+	  	select prental_id, prental_de, pin.croom_id, prental_time_info, cr.croom_name, cr.croom_location 
+		from prental_info pin, classroom cr
+		where pin.croom_id = cr.croom_id
+	  </select>
+	  
+	  <!-- 장소와 날짜를 고르면 croom_id를 기반으로 다섯개의 값을 가져오는 sql문 -->
+	  <select id="viewRentalPlace" resultType="RentalDto">
+	  	select prental_id, prental_de, pin.croom_id, prental_time_info, cr.croom_name 
+		from prental_info pin, classroom cr
+		where pin.croom_id = #{croom_id} and pin.croom_id = cr.croom_id
+	  </select>
+	  
+	  <!-- 예약하기 버튼 클릭 시 해당 정보를 기반으로 예약하는 sql문 -->
+	  <insert id="insertRentalinfo" parameterType="RentalDto">
+	  	INSERT INTO prental_info
+		prental_de, prental_time_info, user_id, croom_id
+		VALUES(#{prental_de}, #{prental_time_info}, #{user_id}, #{croom_id})
+	  </insert>
+	  
+	  <!-- 선택한 장소와 날짜를 기반으로 prental_id와 장소, 날짜, 타임을 가져오는 sql문 -->
+	  <select id="viewRentalTable" parameterType="RentalDto">
+	  	select prental_id, cr.croom_name, prental_de, prental_time_info
+		from 	classroom cr, prental_info
+		where 	cr.croom_id = prental_info.croom_id 
+		and		croom_name = #{croom_name}
+		and 	prental_de = #{prental_de}
+	  </select>
+  </mapper>
