@@ -1,7 +1,8 @@
 package com.youngtvjobs.ycc.rental;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,11 @@ public class RentalDaoImpl implements RentalDao{
 	}
 
 	@Override
-	public List<RentalDto> selectAll(String croom_id) throws Exception {
-		// TODO Auto-generated method stub
-		return session.selectList(namespace + "viewRentalPlace", croom_id);
+	public List<RentalDto> selectAll(String croom_id, String prental_de) throws Exception {
+		Map map = new HashMap();
+		map.put("croom_id", croom_id);
+		map.put("prental_de", prental_de);
+		return session.selectList(namespace + "viewRentalPlace", map);
 	}
 
 	@Override

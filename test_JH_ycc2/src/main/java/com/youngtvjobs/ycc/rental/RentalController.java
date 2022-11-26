@@ -1,6 +1,5 @@
 package com.youngtvjobs.ycc.rental;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +49,7 @@ public class RentalController{
 	@GetMapping("/rental/place") 
 	// Dto에서 장소들 이름 받아와 selectBox에 출력해주는 메서드 //애초에 이부분을 하나의 mapping으로 정의해야하는 필요성을 잘 모르겠음
 
-	public String rentalPlace(Model m, HttpServletRequest request) { 
+	public String selectpage(Model m, HttpServletRequest request) { 
 		//로그인 확인 
 		// if(!logincheck(request)) 
 		// return "redirect:/login?toURL="+request.getRequestURL();
@@ -57,41 +57,50 @@ public class RentalController{
 	  //dto에서 장소 이름들 받아오는 부분 
 	  try { 
 		  List<RentalDto> placelist = rentalService.selectRentalPlace(); 
-		  for(int i=0; i<placelist.size(); i++) {
-			  boolean a = placelist.get(i).getCroom_location().equals("1층");
-			  System.out.println(i+ ": "+a);
-		  }
+			/*
+			 * for(int i=0; i<placelist.size(); i++) { boolean a =
+			 * placelist.get(i).getCroom_location().equals("1층"); System.out.println(i+
+			 * ": "+a); }
+			 */
 		  m.addAttribute("placelist", placelist);
 		  System.out.println(placelist);
 	  }catch(Exception e)
 	{ 
-		  e.printStackTrace(); }return"rental/place";
+		  e.printStackTrace(); }
+	  return"rental/place";
 	}
 	
-	/*@PostMapping("/rental/place")
-	@ResponseBody
-	public ResponseEntity<List<RentalDto>> list(Map map, Model m, String croom_id, Date prental_de,  HttpServletRequest request) {
-		List<RentalDto> list = null;*/
-		
+	
+	/*
 	@PostMapping("/rental/place")
-	public String list() {
-		List<RentalDto> list = null;
+	@ResponseBody
+	public RentalDto list(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String croom_id, String prental_de) {
+		List<RentalDto> rentalDto = new List<>();
 		
 		try {
-			list = rentalService.checkRental();
+			
+			rentalDto = rentalService.checkRental();
+			
 			// checkRental을 이용해서 ajax 다시 구현하는 중
-			
-			
-			
+		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect://rental/place/";
-	}
-		/*
+		
+		return rentalDto;
+	} 
+	*/
+	
+	@PostMapping("/rental/place/{croom_id}")
+	@ResponseBody
+	public ResponseEntity<List<RentalDto>> rentalcheck(Map map, Model m, @PathVariable String croom_id, @PathVariable String prental_de,  HttpServletRequest request) {
+		List<RentalDto> list = null;
+
+	
+		
 		
 		try {
-			list = rentalService.getList(croom_id);
+			list = rentalService.getList(croom_id, prental_de);
 			m.addAttribute("list",list); 
 			
 			System.out.println(m);
@@ -102,8 +111,10 @@ public class RentalController{
 			e.printStackTrace();
 			return new ResponseEntity<List<RentalDto>>(HttpStatus.BAD_REQUEST);	//400
 		}
+		
+		
 	}
-	*/	
+		
 	
 	
 	/*
@@ -125,3 +136,5 @@ public class RentalController{
 	}
 	
 }
+
+

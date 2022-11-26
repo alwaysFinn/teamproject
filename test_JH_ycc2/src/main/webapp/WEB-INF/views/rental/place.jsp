@@ -255,7 +255,7 @@ td {
 	$(document).ready(function() { 
 		
 		
-		let prental_id = 1
+		//let prental_id = 1
 	
 	$("#viewBtn").click(function() {
 		alert("조회하기 버튼")
@@ -270,14 +270,13 @@ td {
 		
 		$.ajax({
 			type: 'POST',
-			url: '/ycc/rental/place?croom_id=' + croom_id , //수정요망
-			headers: {"content-type" : "application/json"},
-			data: JSON.stringify({prental_id:prental_id, croom_id:croom_id, prental_de:prental_de}),
+			url: '/ycc/rental/place/croom_id/'+croom_id + '?prental_de=' + prental_de, //수정요망
+			
+			data: 'croom_id=' + $("select[name=selectplace]").val() +'prental_de=' + $("input[name=rday]").val(),
+			dataType: 'json',
 			success: function(result){
-				//alert("값 전송하기 테스트")
 				alert(result)
 				$("#rentaltable").html(toHtml(result))//'22.11.22 여기까지 되는 거 확인, db에서 값까지 가져오는데 가져오는 값이 이상함
-				//alert("뭘봐")
 				
 			},
 			error: function() {alert("rental error")}
@@ -321,9 +320,9 @@ td {
 				alert("prental_de type : " + typeof info.prental_de) //뜸-number */
 				 
 				tmp += '<tr>'
-				tmp += '<td class="classroom"' + info.croom_id + '>' + ${list.croom_id} + '/td>'
-				tmp += '<td class="rentaldate">' + ${info.croom_name} + '</td>'
-				tmp += '<td class="selecteddate">' + ${info.prental_de} + '/td>'
+				tmp += '<td class="classroom"' + info.croom_name + '>' + ${list.croom_name} + '/td>'
+				tmp += '<td class="rentaldate">' + ${info.prental_de} + '</td>'
+				tmp += '<td class="selecteddate">' + ${info.prental_time_info} + '/td>'
 				tmp += '<td><input type="checkbox" id="cbox" name="cbox" value="토끼"></td>'
 				tmp += '</tr>'
 			})
