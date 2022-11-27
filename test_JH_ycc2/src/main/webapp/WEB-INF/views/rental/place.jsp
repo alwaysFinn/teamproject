@@ -124,9 +124,7 @@ td {
 
 				</p>
 				<button id="viewBtn">조회하기</button>
-				<c:forEach var="placelist" items="${placelist}">
-					<div class="data-prentalId" data-prentalId = "${placelist.prental_id}"></div>
-				</c:forEach>
+				
 
 				<!--대관 장소 선택 끝-->
 			</div>
@@ -260,22 +258,25 @@ td {
 	$("#viewBtn").click(function() {
 		alert("조회하기 버튼")
 		
-		let croom_id = $("select[name=selectplace]").val()
-		alert(croom_id)
-		let prental_de = $("input[name=rday]").val()
-		alert(prental_de)
-		//작동확인
+		let croom_id = encodeURIComponent($("select[name=selectplace]").val())
+		console.log(typeof((croom_id)))
+		let prental_de = encodeURIComponent($("input[name=rday]").val())
+		console.log(typeof((prental_de)))
+		console.log(prental_de)
 		
+		var params = "croom_id=" + croom_id;
+		params += "&prental_de=" + prental_de;
+		//작동확인
+
 		
 		
 		$.ajax({
-			type: 'POST',
-			url: '/ycc/rental/place/croom_id/'+croom_id + '?prental_de=' + prental_de, //수정요망
-			
-			data: 'croom_id=' + $("select[name=selectplace]").val() +'prental_de=' + $("input[name=rday]").val(),
-			dataType: 'json',
+			type: 'GET',
+			url: '/ycc/rental/place?' + params,
 			success: function(result){
-				alert(result)
+				//console.log(result)
+				console.log(result.croom_name)
+				console.log(result.prental_de)
 				$("#rentaltable").html(toHtml(result))//'22.11.22 여기까지 되는 거 확인, db에서 값까지 가져오는데 가져오는 값이 이상함
 				
 			},
@@ -310,20 +311,15 @@ td {
 				tmp += '</tr>'
 				tmp += '</thead>'
 				tmp += '<tbody>'
+				console.log(typeof(rentalinfos.croom_name))
 					
 			rentalinfos.forEach(function(info) {
-				
-				//let info = ${info.croom_id}, ${result.croom_name}, ${info.prental_de}
-				//여기서는 뜸
-				/* alert("croom_id type : " + typeof info.croom_id) //뜸-string
-				alert("croom_name type : " + typeof info.croom_name) //뜸-string
-				alert("prental_de type : " + typeof info.prental_de) //뜸-number */
-				 
+								 
 				tmp += '<tr>'
-				tmp += '<td class="classroom"' + info.croom_name + '>' + ${list.croom_name} + '/td>'
-				tmp += '<td class="rentaldate">' + ${info.prental_de} + '</td>'
+				tmp += '<td class="classroom"' + info.croom_name + '>' + ${info.croom_name} + '/td>'
+				tmp += '<td class="rentaltime">' + ${info.prental_de} + '</td>'
 				tmp += '<td class="selecteddate">' + ${info.prental_time_info} + '/td>'
-				tmp += '<td><input type="checkbox" id="cbox" name="cbox" value="토끼"></td>'
+				tmp += '<td><input type="checkbox" id="cbox" name="cbox"></td>'
 				tmp += '</tr>'
 			})
 			tmp += "</tbody>"
@@ -393,17 +389,18 @@ td {
       }
     
   //select 에서 값 가져오기 //미적용
-	  const showValue = (target) => {
+	 /*  const showValue = (target) => {
 		  const value = target.value;
 		  const text =  target.options[target.selectedIndex].text;
 		  
 		  document.querySelector(`div`).innerHTML = `text: ${text} value: ${value}`;
 		}
     
-	  })
+	  }) */
   
 	  	let msg = "${msg}"
 	  	if(msg == "REN_OK") alert("예약신청을 완료했습니다.")
+	  })
   </script>
 
 	<!-- footer inlcude -->

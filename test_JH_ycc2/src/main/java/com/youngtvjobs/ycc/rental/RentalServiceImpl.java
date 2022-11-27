@@ -1,7 +1,7 @@
 package com.youngtvjobs.ycc.rental;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class RentalServiceImpl implements RentalService{
 	}
 
 	@Override//select, calender에서 선택한 값을 기반으로 하단 테이블에 보여주는 기능, 오작동
-	public List<RentalDto> getList(String croom_id, String prental_de) throws Exception {
+	public List<RentalDto> getList(String croom_id, Date prental_de) throws Exception {
 		List<RentalDto> list = null;
 		list = rentalDao.selectAll(croom_id, prental_de);
 		System.out.println("list = " + list);

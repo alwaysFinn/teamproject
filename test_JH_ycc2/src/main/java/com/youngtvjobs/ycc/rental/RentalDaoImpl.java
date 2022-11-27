@@ -1,5 +1,6 @@
 package com.youngtvjobs.ycc.rental;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,11 @@ public class RentalDaoImpl implements RentalDao{
 	}
 
 	@Override
-	public List<RentalDto> selectAll(String croom_id, String prental_de) throws Exception {
+	public List<RentalDto> selectAll(String croom_id, Date prental_de) throws Exception {
 		Map map = new HashMap();
 		map.put("croom_id", croom_id);
 		map.put("prental_de", prental_de);
-		return session.selectList(namespace + "viewRentalPlace", map);
+		return session.selectList(namespace + "tlscjfghks", map);
 	}
 
 	@Override

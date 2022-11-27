@@ -1,16 +1,13 @@
 package com.youngtvjobs.ycc.rental;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public class RentalDto {
 
 	private int prental_id; // 대여예약번호(pk)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date prental_de; // 대여날짜
 	private int prental_time_info;// 대여시간
 	private String user_id; // 회원아이디 (fk)
@@ -58,14 +55,22 @@ public class RentalDto {
 		this.sroom_checkout_time = sroom_checkout_time;
 	}
 
+	public String getQueryString(String croom_id, Date prental_de) {
+		return UriComponentsBuilder.newInstance()
+				.queryParam("croom_id", croom_id)
+				.queryParam("prental_de", prental_de)
+				.build().toString();
+	}
 	/*
-	 * public RentalDto(int prental_id,Date prental_de, String croom_id, int
-	 * prental_duration, String croom_name) { this.prental_id = prental_id;
-	 * this.prental_de = prental_de; this.croom_id = croom_id; this.prental_duration
-	 * = prental_duration; this.croom_name = croom_name;
+	 * // dto.prental_de()의 형식으로 사용해야함 public String prental_de() { DateFormat
+	 * sdFormat = new SimpleDateFormat("yyyy-MM-dd"); String prental_date =
+	 * sdFormat.format(prental_de);
 	 * 
-	 * }
+	 * return prental_date; }
 	 */
+	
+	
+	
 
 	public int getPrental_id() {
 		return prental_id;
@@ -224,7 +229,7 @@ public class RentalDto {
 
 	@Override
 	public String toString() {
-		return "RentalDto [prental_id=" + prental_id + ", prental_de=" + prental_de + ", prental_duration="
+		return "RentalDto [prental_id=" + prental_id + ", prental_de=" + prental_de + ", prental_time_info="
 				+ prental_time_info + ", user_id=" + user_id + ", croom_id=" + croom_id + ", croom_location="
 				+ croom_location + ", croom_mpop=" + croom_mpop + ", croom_name=" + croom_name + ", locker_id="
 				+ locker_id + ", locker_location=" + locker_location + ", locker_start_date=" + locker_start_date
@@ -232,13 +237,15 @@ public class RentalDto {
 				+ sroom_seat_id + ", sroom_entry_time=" + sroom_entry_time + ", sroom_checkout_time="
 				+ sroom_checkout_time + "]";
 	}
+	
+	
+		
 
-	// dto.prental_de()의 형식으로 사용해야함
-	public String prental_de() {
-		DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String prental_date = sdFormat.format(prental_de);
-
-		return prental_date;
-	}
+	//db에서 timestamp로 정의된 값을 string으로 바꾸는 메서드
+	/*public static String date_toString(Date date) {
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String prental_de = sdf.format(date);
+		return prental_de;	
+	}*/
 
 }

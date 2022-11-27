@@ -1,7 +1,9 @@
 package com.youngtvjobs.ycc.rental;
 
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -57,13 +58,7 @@ public class RentalController{
 	  //dto에서 장소 이름들 받아오는 부분 
 	  try { 
 		  List<RentalDto> placelist = rentalService.selectRentalPlace(); 
-			/*
-			 * for(int i=0; i<placelist.size(); i++) { boolean a =
-			 * placelist.get(i).getCroom_location().equals("1층"); System.out.println(i+
-			 * ": "+a); }
-			 */
 		  m.addAttribute("placelist", placelist);
-		  System.out.println(placelist);
 	  }catch(Exception e)
 	{ 
 		  e.printStackTrace(); }
@@ -71,39 +66,36 @@ public class RentalController{
 	}
 	
 	
-	/*
-	@PostMapping("/rental/place")
+	@GetMapping("/rental/place/{croom_id}/{prental_de}")
 	@ResponseBody
-	public RentalDto list(HttpServletRequest req, HttpServletResponse resp, HttpSession session, String croom_id, String prental_de) {
-		List<RentalDto> rentalDto = new List<>();
+	public ResponseEntity<List<RentalDto>> rentalcheck(@PathVariable String croom_id, @PathVariable String prental_de,  HttpServletRequest request) {
 		
-		try {
-			
-			rentalDto = rentalService.checkRental();
-			
-			// checkRental을 이용해서 ajax 다시 구현하는 중
-		
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return rentalDto;
-	} 
-	*/
-	
-	@PostMapping("/rental/place/{croom_id}")
-	@ResponseBody
-	public ResponseEntity<List<RentalDto>> rentalcheck(Map map, Model m, @PathVariable String croom_id, @PathVariable String prental_de,  HttpServletRequest request) {
 		List<RentalDto> list = null;
-
-	
+		RentalDto rentalDto = new RentalDto();
+		String croomid = request.getParameter("croom_id");
+        String prentalde = request.getParameter("prental_de");
+        
+        System.out.println("croomid : " + croomid);
+        System.out.println("prentalde : " + prentalde);
+		
+		//String encodeResult = URLEncoder.encode(String croom_id, String charsetName);
 		
 		
 		try {
-			list = rentalService.getList(croom_id, prental_de);
-			m.addAttribute("list",list); 
 			
-			System.out.println(m);
+			//jsp에서 온 값이 string이므로 DB에서 값을 가져오려면 Date 형식으로 변환해줘야 함 / 해당 부분을 이행하기 위해 형변환 후 setter를 이용해 지정해주는 부분
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date date_rental_de = sdf.parse(prentalde);
+			rentalDto.setPrental_de(date_rental_de);
+			
+			/*
+			 * String croom_id2 = URLDecoder.decode(croom_id, "UTF-8"); String prental_de2 =
+			 * URLDecoder.decode(prental_de, "UTF-8");
+			 */
+			
+			list = rentalService.getList(croomid, date_rental_de);
+			
+
 			System.out.println("list : " + list); //하나의 인자씩 받아와서 해보기
 			return new ResponseEntity<List<RentalDto>>(list, HttpStatus.OK);		//200
 			
@@ -114,6 +106,8 @@ public class RentalController{
 		
 		
 	}
+	
+	
 		
 	
 	
