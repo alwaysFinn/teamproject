@@ -35,17 +35,15 @@ public class RentalDaoImpl implements RentalDao{
 	}
 
 	@Override
-	public int insertRentalinfo(RentalDto dto) throws Exception {
-		return session.insert(namespace + "insertRentalinfo", dto);
-	}
-
-	@Override
 	public List<RentalDto> selectRental() throws Exception {
 		return session.selectList(namespace + "viewRentalTable");
 	}
 	
-	
-
+	//예약하는 insert 로직
+	@Override
+	public int insertRentalinfo(RentalDto dto) throws Exception {
+		return session.insert(namespace + "insertRentalinfo", dto);
+	}
 	
 
 }

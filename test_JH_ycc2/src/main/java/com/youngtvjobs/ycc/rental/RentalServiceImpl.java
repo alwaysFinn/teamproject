@@ -22,7 +22,7 @@ public class RentalServiceImpl implements RentalService{
 		return rentalDao.select();
 	}
 
-	@Override//select, calender에서 선택한 값을 기반으로 하단 테이블에 보여주는 기능, 오작동
+	@Override//select, calender에서 선택한 값을 기반으로 하단 테이블에 보여주는 기능
 	public List<RentalDto> getList(String croom_id, Date prental_de) throws Exception {
 		List<RentalDto> list = null;
 		list = rentalDao.selectAll(croom_id, prental_de);
@@ -40,7 +40,6 @@ public class RentalServiceImpl implements RentalService{
 		return rentalDao.selectRental();
 	}
 	
-	//public 
 	
 }
 	

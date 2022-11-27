@@ -1,6 +1,5 @@
 package com.youngtvjobs.ycc.rental;
 
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -66,17 +64,21 @@ public class RentalController{
 	}
 	
 	
-	@GetMapping("/rental/place/{croom_id}/{prental_de}")
-	@ResponseBody
-	public ResponseEntity<List<RentalDto>> rentalcheck(@PathVariable String croom_id, @PathVariable String prental_de,  HttpServletRequest request) {
+	@GetMapping("/rental/place.send")
+	public ResponseEntity<List<RentalDto>> rentalcheck(@RequestParam("croom_id") String croom_id, @RequestParam("prental_de") String prental_de,  HttpServletRequest request) {
 		
 		List<RentalDto> list = null;
-		RentalDto rentalDto = new RentalDto();
-		String croomid = request.getParameter("croom_id");
-        String prentalde = request.getParameter("prental_de");
-        
-        System.out.println("croomid : " + croomid);
-        System.out.println("prentalde : " + prentalde);
+		System.out.println(croom_id);
+		System.out.println(prental_de);
+		
+		
+		  RentalDto rentalDto = new RentalDto(); 
+		  /*String croomid = request.getParameter("croom_id"); String prentalde =
+		  request.getParameter("prental_de");
+		  
+		  System.out.println("croomid : " + croomid); System.out.println("prentalde : "
+		  + prentalde);*/
+		 
 		
 		//String encodeResult = URLEncoder.encode(String croom_id, String charsetName);
 		
@@ -85,7 +87,7 @@ public class RentalController{
 			
 			//jsp에서 온 값이 string이므로 DB에서 값을 가져오려면 Date 형식으로 변환해줘야 함 / 해당 부분을 이행하기 위해 형변환 후 setter를 이용해 지정해주는 부분
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date_rental_de = sdf.parse(prentalde);
+			Date date_rental_de = sdf.parse(prental_de);
 			rentalDto.setPrental_de(date_rental_de);
 			
 			/*
@@ -93,7 +95,7 @@ public class RentalController{
 			 * URLDecoder.decode(prental_de, "UTF-8");
 			 */
 			
-			list = rentalService.getList(croomid, date_rental_de);
+			list = rentalService.getList(croom_id, date_rental_de);
 			
 
 			System.out.println("list : " + list); //하나의 인자씩 받아와서 해보기

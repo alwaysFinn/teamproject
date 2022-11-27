@@ -34,6 +34,7 @@ td {
 					처리)</li>
 			</ol>
 		</div>
+		<h1>{RentalDto.croom_id}</h1>
 
 		<div class="row mb-3">
 			<div class="col-12 col-md-6 " id="change">
@@ -194,6 +195,29 @@ td {
 		<!-- Button trigger modal -->
 		<button type="button" class="btn btn-primary " data-bs-toggle="modal"
 			data-bs-target="#exampleModal">신청하기</button>
+			<table>
+				<tr>
+					<th class="no">번호</th>
+					<th class="title">제목</th>
+					<th class="writer">이름</th>
+					<th class="regdate">등록일</th>
+					<th class="viewcnt">조회수</th>
+				</tr>
+				
+				<c:forEach var="rentalDto" items="${list }">
+					<tr>
+						<td class="no">${rentalDto.croom_id}</td>
+						<td class="title">
+							<!-- <a href="<c:url value="/board/read${pr.sc.queryString}&bno=${boardDto.bno }" />">  -->
+								${rentalDto.croom_name }
+							<!-- </a> -->
+						</td>
+						<td class="writer">${rentalDto.prental_time_info }</td>
+									<td class="regdate"><fmt:formatDate value="${rentalDto.prental_de }" pattern="yyyy-MM-dd" type="date"/></td>
+						<td class="viewcnt">${rentalDto.user_id }</td>
+					</tr>
+				</c:forEach>
+			</table>
 	</div>
 
 	<!-- Modal -->
@@ -264,17 +288,20 @@ td {
 		console.log(typeof((prental_de)))
 		console.log(prental_de)
 		
-		var params = "croom_id=" + croom_id;
+		var params = "?croom_id=" + croom_id;
 		params += "&prental_de=" + prental_de;
 		//작동확인
 
 		
-		
 		$.ajax({
 			type: 'GET',
-			url: '/ycc/rental/place?' + params,
+			url: 'ycc/rental/place.send',
+			data : {
+				croom_id : "101",
+				prental_de : "2022-11-28",
+			}
 			success: function(result){
-				//console.log(result)
+				console.log(result)
 				console.log(result.croom_name)
 				console.log(result.prental_de)
 				$("#rentaltable").html(toHtml(result))//'22.11.22 여기까지 되는 거 확인, db에서 값까지 가져오는데 가져오는 값이 이상함
@@ -282,6 +309,19 @@ td {
 			},
 			error: function() {alert("rental error")}
 		})
+		
+		/* $.ajax({
+			type: 'GET',
+			url: 'ycc/rental/place/' + params,
+			success: function(result){
+				console.log(result)
+				console.log(result.croom_name)
+				console.log(result.prental_de)
+				$("#rentaltable").html(toHtml(result))//'22.11.22 여기까지 되는 거 확인, db에서 값까지 가져오는데 가져오는 값이 이상함
+				
+			},
+			error: function() {alert("rental error")}
+		}) */
 		
 	})
 		
